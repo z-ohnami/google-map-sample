@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 300px;
+        width: 400px;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      var map;
+      function initMap() {
+        let apiKey = '';
+        let address = '東京都調布市小島町1-38-1';
+        $(function(){
+          $.ajax({
+            method: 'get',
+            url: `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(address)}&key=${apiKey}`
+          })
+            .done((response) => {
+              let lat = response.results[0].geometry.location.lat
+              let lng = response.results[0].geometry.location.lng
+
+              map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: lat, lng: lng},
+                //center: {lat: 35.658811, lng: 139.745444},
+                zoom: 17
+              });
+      
+              var marker = new google.maps.Marker( {
+                map: map ,
+                position: new google.maps.LatLng( lat, lng ),
+                title: 'here!!',
+                icon: { 
+                  url: './marker.png',
+                  scaledSize: new google.maps.Size( 24, 24 ) ,
+                },
+                animation: google.maps.Animation.DROP,
+              });
+            })
+        });
+      }
+    </script>
+    <script src=`https://maps.googleapis.com/maps/api/js?key=&callback=initMap`
+    async defer></script>
+  </body>
+</html>
